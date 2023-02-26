@@ -11,6 +11,8 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      ACTIONS_STEP_DEBUG: true
 
     steps:
       - uses: actions/checkout@v2
@@ -19,6 +21,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version-file: ./.node-version
+          cache: npm
 
       - name: cache node_modules
         id: node_modules_cache_id
@@ -26,7 +29,7 @@ jobs:
         with:
           path: |
             node_modules
-          key: node-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/yarn.lock')) }}
+          key: node-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
 
       - run: corepack enable
 
